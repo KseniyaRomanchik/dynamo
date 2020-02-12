@@ -10,6 +10,9 @@ type DynamoRepo interface {
 	InfoTable(string) (*dynamodb.DescribeTableOutput, error)
 	GetTable(string) (*dynamodb.ScanOutput, error)
 	ListTable() (*dynamodb.ListTablesOutput, error)
+	DelTable(string) (*dynamodb.DeleteTableOutput, error)
+	CrTable(string) (*dynamodb.CreateTableOutput, error)
+	UpdTable(string) (*dynamodb.UpdateTableOutput, error)
 }
 
 type Dynamo struct {
@@ -40,4 +43,22 @@ func (c Dynamo) GetTable(tableName string) (*dynamodb.ScanOutput, error) {
 
 func (c Dynamo) ListTable() (*dynamodb.ListTablesOutput, error) {
 	return c.ListTables(&dynamodb.ListTablesInput{})
+}
+
+func (c Dynamo) DelTable(tableName string) (*dynamodb.DeleteTableOutput, error) {
+	return c.DeleteTable(&dynamodb.DeleteTableInput{
+		TableName: aws.String(tableName),
+	})
+}
+
+func (c Dynamo) CrTable(tableName string) (*dynamodb.CreateTableOutput, error) {
+	return c.CreateTable(&dynamodb.CreateTableInput{
+		TableName: aws.String(tableName),
+	})
+}
+
+func (c Dynamo) UpdTable(tableName string) (*dynamodb.UpdateTableOutput, error) {
+	return c.UpdateTable(&dynamodb.UpdateTableInput{
+		TableName: aws.String(tableName),
+	})
 }

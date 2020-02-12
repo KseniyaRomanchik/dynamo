@@ -26,13 +26,13 @@ func LoadFlags() error {
 
 	Flags = []cli.Flag{
 		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:  string(HashKey),
+			Name:  HashKey,
 			Usage: "hash key",
 		}),
-		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:  string(Output),
-			Usage: "output",
-		}),
+		//altsrc.NewStringFlag(&cli.StringFlag{
+		//	Name:  Output,
+		//	Usage: "output",
+		//}),
 	}
 
 	return nil
@@ -40,7 +40,7 @@ func LoadFlags() error {
 
 var RequiredFlags = []cli.Flag{
 	&cli.StringFlag{
-		Name:  string(TableName),
+		Name:  TableName,
 		Usage: "table name",
 		Required: true,
 	},
@@ -48,7 +48,7 @@ var RequiredFlags = []cli.Flag{
 
 var TerraformFlags = []cli.Flag{
 	&cli.StringFlag{
-		Name:  string(TableName),
+		Name:  TableName,
 		Usage: "table name",
 		Required: true,
 	},

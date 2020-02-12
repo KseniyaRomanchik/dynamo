@@ -1,20 +1,19 @@
 package commands
 
-import "github.com/urfave/cli/v2"
-
-type Command string
-type Subcommand string
+import (
+	"dynamo/app"
+)
 
 const (
-	Get Subcommand = "get"
-	List Subcommand = "list"
-	Put Subcommand = "put"
-	Delete Subcommand = "delete"
-	Post Subcommand = "post"
-	Info Subcommand = "info"
+	Get = "get"
+	List = "list"
+	Put = "put"
+	Delete = "delete"
+	Post = "post"
+	Info = "info"
 
-	Table Command = "table"
-	Item Command = "item"
+	Table = "table"
+	Item = "item"
 
 	show_table = "show_table"
 	list_items = "list_items"
@@ -34,9 +33,12 @@ const (
 	load_ssm = "load_ssm"
 )
 
-var fns = map[Command]func(ctx *cli.Context) error {
-	"info_table": infoTable,
-	"get_table": getTable,
-	"list_table": listTable,
+var Fns = map[string]func(app.Options) error {
+	"info_table": app.InfoTable,
+	"get_table": app.GetTable,
+	"list_table": app.ListTable,
+	"create_table": app.CreateTable,
+	"delete_table": app.DeleteTable,
+	"update_table": app.UpdateTable,
 }
 

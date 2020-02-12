@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"dynamo/app"
 	"fmt"
 	"github.com/urfave/cli/v2"
 	"dynamo/cli/flags"
@@ -12,51 +13,51 @@ var (
 	Subcommands []*cli.Command
 )
 
-func getSubcommands(command Command) []*cli.Command {
+func getSubcommands(c string) []*cli.Command {
 	fls := append(flags.Flags, flags.RequiredFlags...)
 
 	return []*cli.Command{
 		{
-			Name:      string(Info),
-			UsageText: fmt.Sprintf("*** info %s", command),
+			Name:      Info,
+			UsageText: fmt.Sprintf("*** info %s", c),
 			Usage:     "info",
 			Flags:     fls,
-			Action:    commandAction(info(command)),
+			Action:    commandAction(command(c, "info")),
 		},
 		{
-			Name:      string(Get),
-			UsageText: fmt.Sprintf("*** get %s", command),
+			Name:      Get,
+			UsageText: fmt.Sprintf("*** get %s", c),
 			Usage:     "get",
 			Flags:     fls,
-			Action:    commandAction(get(command)),
+			Action:    commandAction(command(c, "get")),
 		},
 		{
-			Name:      string(Put),
-			UsageText: fmt.Sprintf("*** put %s", command),
+			Name:      Put,
+			UsageText: fmt.Sprintf("*** put %s", c),
 			Usage:     "put",
 			Flags:     fls,
-			Action:    commandAction(put(command)),
+			Action:    commandAction(command(c, "update")),
 		},
 		{
-			Name:      string(Delete),
-			UsageText: fmt.Sprintf("*** delete %s", command),
+			Name:      Delete,
+			UsageText: fmt.Sprintf("*** delete %s", c),
 			Usage:     "delete",
 			Flags:     fls,
-			Action:    commandAction(deleteAction(command)),
+			Action:    commandAction(command(c, "delete")),
 		},
 		{
-			Name:      string(Post),
-			UsageText: fmt.Sprintf("*** post %s", command),
+			Name:      Post,
+			UsageText: fmt.Sprintf("*** post %s", c),
 			Usage:     "post",
 			Flags:     fls,
-			Action:    commandAction(post(command)),
+			Action:    commandAction(command(c, "create")),
 		},
 		{
-			Name:      string(List),
-			UsageText: fmt.Sprintf("*** list %s", command),
+			Name:      List,
+			UsageText: fmt.Sprintf("*** list %s", c),
 			Usage:     "list",
 			Flags:     flags.Flags,
-			Action:    commandAction(list(command)),
+			Action:    commandAction(command(c, "list")),
 		},
 
 	}
@@ -65,14 +66,14 @@ func getSubcommands(command Command) []*cli.Command {
 func LoadCommands() {
 	Commands = []*cli.Command{
 		{
-			Name:      string(Table),
+			Name:      Table,
 			UsageText: "*** table ",
 			Usage:     "table",
 			Flags:     flags.Flags,
 			Subcommands: getSubcommands(Table),
 		},
 		{
-			Name:      string(Item),
+			Name:      Item,
 			UsageText: "*** item ",
 			Usage:     "item",
 			Flags:     flags.Flags,
@@ -95,5 +96,13 @@ func commandAction(actionFns ...func(*cli.Context) error) func(c *cli.Context) e
 		}
 
 		return nil
+	}
+}
+
+func command(c, subc string) func (*cli.Context) error {
+	return func(ctx *cli.Context) error {
+		return Fns[subc+"_"+c](app.Options{
+			TableName: ctx.String(flags.TableName),
+		})
 	}
 }
