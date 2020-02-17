@@ -10,8 +10,18 @@ func UpdateTable(opts Options) error {
 
 	table, err := db.Client.UpdTable(tableName)
 	if err != nil {
-		return err
+		return printer.Printer.PrintAWSErr(err)
 	}
 
 	return printer.Printer.PrintJSON(table)
+}
+
+
+func UpdateItem(opts Options) error {
+	item, err := db.Client.UpdItem(opts.TableName, opts.HashKey, opts.AttributeUpdates)
+	if err != nil {
+		return printer.Printer.PrintAWSErr(err)
+	}
+
+	return printer.Printer.PrintText(item)
 }

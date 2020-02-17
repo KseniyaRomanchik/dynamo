@@ -3,6 +3,7 @@ package flags
 const (
 	TableName = "table-name"
 	HashKey = "hash-key"
+	AttributeUpdates = "attribute-updates"
 	Output = "output"
 
 	ItemsList = "items_list"

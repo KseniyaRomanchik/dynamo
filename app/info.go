@@ -10,8 +10,8 @@ func InfoTable(opts Options) error {
 
 	info, err := db.Client.InfoTable(tableName)
 	if err != nil {
-		return err
+		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintJSON(info)
+	return printer.Printer.PrintText(info)
 }

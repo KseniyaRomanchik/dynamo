@@ -2,10 +2,10 @@ package commands
 
 import (
 	"dynamo/app"
-	"fmt"
-	"github.com/urfave/cli/v2"
 	"dynamo/cli/flags"
+	"fmt"
 	log "github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
 )
 
 var (
@@ -32,10 +32,10 @@ func getSubcommands(c string) []*cli.Command {
 			Action:    commandAction(command(c, "get")),
 		},
 		{
-			Name:      Put,
-			UsageText: fmt.Sprintf("*** put %s", c),
-			Usage:     "put",
-			Flags:     fls,
+			Name:      Update,
+			UsageText: fmt.Sprintf("*** update %s", c),
+			Usage:     "update",
+			Flags:     append(fls, flags.UpdateFlags...),
 			Action:    commandAction(command(c, "update")),
 		},
 		{
@@ -46,9 +46,9 @@ func getSubcommands(c string) []*cli.Command {
 			Action:    commandAction(command(c, "delete")),
 		},
 		{
-			Name:      Post,
-			UsageText: fmt.Sprintf("*** post %s", c),
-			Usage:     "post",
+			Name:      Create,
+			UsageText: fmt.Sprintf("*** create %s", c),
+			Usage:     "create",
 			Flags:     fls,
 			Action:    commandAction(command(c, "create")),
 		},
@@ -56,7 +56,7 @@ func getSubcommands(c string) []*cli.Command {
 			Name:      List,
 			UsageText: fmt.Sprintf("*** list %s", c),
 			Usage:     "list",
-			Flags:     flags.Flags,
+			Flags:     fls,
 			Action:    commandAction(command(c, "list")),
 		},
 
@@ -69,14 +69,14 @@ func LoadCommands() {
 			Name:      Table,
 			UsageText: "*** table ",
 			Usage:     "table",
-			Flags:     flags.Flags,
+			//Flags:     flags.Flags,
 			Subcommands: getSubcommands(Table),
 		},
 		{
 			Name:      Item,
 			UsageText: "*** item ",
 			Usage:     "item",
-			Flags:     flags.Flags,
+			//Flags:     fls,
 			Subcommands: getSubcommands(Item),
 		},
 	}
@@ -103,6 +103,29 @@ func command(c, subc string) func (*cli.Context) error {
 	return func(ctx *cli.Context) error {
 		return Fns[subc+"_"+c](app.Options{
 			TableName: ctx.String(flags.TableName),
+			HashKey: ctx.String(flags.HashKey),
+			AttributeUpdates: ctx.String(flags.AttributeUpdates),
 		})
 	}
 }
+
+//func parseFlagsWithType(ctx *cli.Context) {
+//	if ctx.IsSet(flags.HashKey) {
+//		key := make(map[string]interface{}, 1)
+//		hk := strings.Split(ctx.String(flags.HashKey), "=")
+//		key, ok := hk[0]
+//		t, ok := hk[1]
+//		v, ok := hk[2]
+//		if len(hk) == 1 {
+//			key[hk[0]] = map[string]interface{}{}
+//		}
+//		if len
+//		key[hk[0]] = map[string]interface{}{
+//				hk[1]: hk[2],
+//			},
+//		}
+//		ctx.Set(flags.HashKey, key)
+//	}
+//
+//
+//}

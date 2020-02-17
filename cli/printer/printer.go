@@ -3,6 +3,7 @@ package printer
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -16,8 +17,9 @@ func (f *printFormatter) Format(entry *log.Entry) ([]byte, error) {
 
 type printer interface {
 	PrintJSON(interface{}) error
-	PrintText(interface{}) error
+	PrintText(fmt.Stringer) error
 	PrintYAML(interface{}) error
+	PrintAWSErr(error) error
 }
 
 type printLogger struct {
@@ -32,7 +34,6 @@ func Init() {
 }
 
 func (l *printLogger) PrintJSON(j interface{}) error {
-	log.Debugf("%s\n", j)
 	res, err := json.Marshal(j)
 	if err != nil {
 		return fmt.Errorf("Cannot print JSON: %+v", err)
@@ -43,10 +44,21 @@ func (l *printLogger) PrintJSON(j interface{}) error {
 	return nil
 }
 
-func (l *printLogger) PrintText(t interface{}) error{
+func (l *printLogger) PrintText(t fmt.Stringer) error{
+	l.Printf("[TEXT] %s\n", t.String())
 	return nil
 }
 
 func (l *printLogger) PrintYAML(y interface{}) error{
+	return nil
+}
+
+func (l *printLogger) PrintAWSErr(e error) error{
+	aerr, ok := e.(awserr.Error)
+	if !ok {
+		return fmt.Errorf("cannot convert to aws error: %+v", e)
+	}
+
+	l.Errorf("[ERROR] aws: %s - %s\n", aerr.Code(), aerr.Message())
 	return nil
 }

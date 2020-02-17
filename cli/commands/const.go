@@ -7,9 +7,9 @@ import (
 const (
 	Get = "get"
 	List = "list"
-	Put = "put"
+	Update = "update"
 	Delete = "delete"
-	Post = "post"
+	Create = "create"
 	Info = "info"
 
 	Table = "table"
@@ -40,5 +40,11 @@ var Fns = map[string]func(app.Options) error {
 	"create_table": app.CreateTable,
 	"delete_table": app.DeleteTable,
 	"update_table": app.UpdateTable,
+
+	"get_item": app.GetItem,
+	"list_item": app.ListItem,
+	"create_item": app.CreateItem,
+	"delete_item": app.DeleteItem,
+	"update_item": app.UpdateItem,
 }
 

@@ -10,8 +10,18 @@ func DeleteTable(opts Options) error {
 
 	table, err := db.Client.DelTable(tableName)
 	if err != nil {
-		return err
+		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintJSON(table)
+	return printer.Printer.PrintText(table)
+}
+
+
+func DeleteItem(opts Options) error {
+	item, err := db.Client.DelItem(opts.TableName, opts.HashKey)
+	if err != nil {
+		return printer.Printer.PrintAWSErr(err)
+	}
+
+	return printer.Printer.PrintText(item)
 }

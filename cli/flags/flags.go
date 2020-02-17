@@ -53,3 +53,11 @@ var TerraformFlags = []cli.Flag{
 		Required: true,
 	},
 }
+
+var UpdateFlags = []cli.Flag{
+	&cli.StringFlag{
+		Name:  AttributeUpdates,
+		Usage: "attribute updates",
+		Required: true,
+	},
+}
