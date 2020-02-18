@@ -16,7 +16,7 @@ func UpdateTable(opts Options) error {
 
 
 func UpdateItem(opts Options) error {
-	item, err := db.Client.UpdItem(opts.TableName, opts.Key, opts.AttributeUpdates)
+	item, err := db.Client.UpdItem(opts.TableName, opts.Key, opts.ItemAttributes)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}

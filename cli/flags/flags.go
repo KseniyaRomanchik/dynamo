@@ -23,16 +23,7 @@ func LoadFlags() error {
 		configPath = fmt.Sprintf("/etc/%s.yaml", "trdeploy")
 	}
 
-	Flags = []cli.Flag{
-		//altsrc.NewStringFlag(&cli.StringFlag{
-		//	Name:  HashKey,
-		//	Usage: "hash key",
-		//}),
-		//altsrc.NewStringFlag(&cli.StringFlag{
-		//	Name:  Output,
-		//	Usage: "output",
-		//}),
-	}
+	Flags = []cli.Flag{}
 
 	return nil
 }
@@ -49,22 +40,14 @@ var ItemKey = &cli.StringFlag{
 	Required: true,
 }
 
-//var TerraformFlags = []cli.Flag{
-//	&cli.StringFlag{
-//		Name:  TableName,
-//		Usage: "table name",
-//		Required: true,
-//	},
-//}
+var ItemAttr = &cli.StringFlag{
+	Name:  ItemAttributes,
+	Usage: "item attributes",
+	Required: true,
+}
 
-var AttrUpdates = &cli.StringFlag{
-		Name:  AttributeUpdates,
-		Usage: "attribute updates",
-		Required: true,
-	}
-
-var AttrCreates = &cli.StringFlag{
-		Name:  AttributeCreates,
-		Usage: "attribute creates",
-		Required: true,
-	}
+var TableAttr = &cli.StringFlag{
+	Name:  TableAttributes,
+	Usage: "table attributes",
+	Required: true,
+}

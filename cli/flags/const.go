@@ -3,8 +3,8 @@ package flags
 const (
 	TableName = "table-name"
 	Key = "key"
-	AttributeUpdates = "attribute-updates"
-	AttributeCreates = "attribute-creates"
+	ItemAttributes = "item-attributes"
+	TableAttributes = "table-attributes"
 	Output = "output"
 
 	ItemsList = "items_list"

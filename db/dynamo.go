@@ -90,16 +90,14 @@ func (c Dynamo) CrTable(tableName string, attrCr string) (*dynamodb.CreateTableO
 }
 
 func (c Dynamo) UpdTable(tableName string) (*dynamodb.UpdateTableOutput, error) {
-	return c.UpdateTable(&dynamodb.UpdateTableInput{
+	input := dynamodb.UpdateTableInput{
 		TableName: aws.String(tableName),
-	})
-}
+	}
 
-//func (c Dynamo) InfoItem(tableName string) (*dynamodb.DescribeTableOutput, error) {
-//	return c.DescribeItem(&dynamodb.DescribeTableInput{
-//		TableName: aws.String(tableName),
-//	})
-//}
+	log.Debug(input)
+
+	return c.UpdateTable(&input)
+}
 
 func (c Dynamo) GItem(tableName string, keys string) (*dynamodb.GetItemOutput, error) {
 	var filter map[string]*dynamodb.AttributeValue

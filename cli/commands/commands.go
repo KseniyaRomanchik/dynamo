@@ -74,18 +74,18 @@ type ActionFlags struct {
 
 func LoadCommands() {
 	tableFls := ActionFlags{
-		Create: append(flags.Flags, flags.TName, flags.AttrCreates),
+		Create: append(flags.Flags, flags.TName, flags.TableAttr),
 		Get: append(flags.Flags, flags.TName),
-		Update: append(flags.Flags, flags.TName),
+		Update: append(flags.Flags, flags.TName, flags.TableAttr),
 		Delete: append(flags.Flags, flags.TName),
 		List: flags.Flags,
 		Info: append(flags.Flags, flags.TName),
 	}
 
 	itemFls := ActionFlags{
-		Create: append(flags.Flags, flags.TName, flags.ItemKey),
+		Create: append(flags.Flags, flags.TName, flags.ItemKey, flags.ItemAttr),
 		Get: append(flags.Flags, flags.TName, flags.ItemKey),
-		Update: append(flags.Flags, flags.TName, flags.ItemKey),
+		Update: append(flags.Flags, flags.TName, flags.ItemKey, flags.ItemAttr),
 		Delete: append(flags.Flags, flags.TName, flags.ItemKey),
 		List: append(flags.Flags, flags.TName),
 		Info: append(flags.Flags, flags.TName, flags.ItemKey),
@@ -129,8 +129,8 @@ func command(c, subc string) func (*cli.Context) error {
 		return Fns[subc+"_"+c](app.Options{
 			TableName: ctx.String(flags.TableName),
 			Key: ctx.String(flags.Key),
-			AttributeUpdates: ctx.String(flags.AttributeUpdates),
-			AttributeCreates: ctx.String(flags.AttributeCreates),
+			TableAttributes: ctx.String(flags.TableAttributes),
+			ItemAttributes: ctx.String(flags.ItemAttributes),
 		})
 	}
 }

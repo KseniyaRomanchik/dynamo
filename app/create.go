@@ -6,7 +6,7 @@ import (
 )
 
 func CreateTable(opts Options) error {
-	table, err := db.Client.CrTable(opts.TableName, opts.AttributeCreates)
+	table, err := db.Client.CrTable(opts.TableName, opts.TableAttributes)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}
