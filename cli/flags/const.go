@@ -5,6 +5,7 @@ const (
 	Key = "key"
 	ItemAttributes = "item-attributes"
 	TableAttributes = "table-attributes"
+
 	Output = "output"
 
 	ItemsList = "items_list"
@@ -15,4 +16,16 @@ const (
 	EnvType = "env_type"
 	SsmName = "ssm_name"
 	Content = "content"
+
+	versionTemplate = `Version: %s
+Commit: %s
+Image: %s
+Timestamp: %s
+`
+)
+
+var (
+	Image  string
+	Commit string
+	Time   string
 )
