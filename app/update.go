@@ -6,9 +6,7 @@ import (
 )
 
 func UpdateTable(opts Options) error {
-	tableName := opts.TableName
-
-	table, err := db.Client.UpdTable(tableName)
+	table, err := db.Client.UpdTable(opts.TableName)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}
@@ -18,7 +16,7 @@ func UpdateTable(opts Options) error {
 
 
 func UpdateItem(opts Options) error {
-	item, err := db.Client.UpdItem(opts.TableName, opts.HashKey, opts.AttributeUpdates)
+	item, err := db.Client.UpdItem(opts.TableName, opts.Key, opts.AttributeUpdates)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}

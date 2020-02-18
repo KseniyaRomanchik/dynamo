@@ -2,7 +2,8 @@ package app
 
 type Options struct {
 	TableName string
-	HashKey string
+	Key string
 	AttributeUpdates string
+	AttributeCreates string
 }
 

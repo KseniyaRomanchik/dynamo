@@ -1,3 +1,6 @@
 package db
 
-const Locked = "locked"
+const (
+	Locked = "locked"
+	DefaultProvisionedThroughput = 10
+	)

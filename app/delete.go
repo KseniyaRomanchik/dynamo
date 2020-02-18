@@ -6,22 +6,20 @@ import (
 )
 
 func DeleteTable(opts Options) error {
-	tableName := opts.TableName
-
-	table, err := db.Client.DelTable(tableName)
+	table, err := db.Client.DelTable(opts.TableName)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintText(table)
+	return printer.Printer.PrintJSON(table.TableDescription)
 }
 
 
 func DeleteItem(opts Options) error {
-	item, err := db.Client.DelItem(opts.TableName, opts.HashKey)
+	item, err := db.Client.DelItem(opts.TableName, opts.Key)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintText(item)
+	return printer.Printer.PrintJSON(item)
 }

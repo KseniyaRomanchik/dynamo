@@ -3,7 +3,6 @@ package flags
 import (
 	"fmt"
 	"github.com/urfave/cli/v2"
-	"github.com/urfave/cli/v2/altsrc"
 	"os"
 )
 
@@ -25,10 +24,10 @@ func LoadFlags() error {
 	}
 
 	Flags = []cli.Flag{
-		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:  HashKey,
-			Usage: "hash key",
-		}),
+		//altsrc.NewStringFlag(&cli.StringFlag{
+		//	Name:  HashKey,
+		//	Usage: "hash key",
+		//}),
 		//altsrc.NewStringFlag(&cli.StringFlag{
 		//	Name:  Output,
 		//	Usage: "output",
@@ -38,26 +37,34 @@ func LoadFlags() error {
 	return nil
 }
 
-var RequiredFlags = []cli.Flag{
-	&cli.StringFlag{
-		Name:  TableName,
-		Usage: "table name",
-		Required: true,
-	},
+var TName = &cli.StringFlag{
+	Name:  TableName,
+	Usage: "table name",
+	Required: true,
 }
 
-var TerraformFlags = []cli.Flag{
-	&cli.StringFlag{
-		Name:  TableName,
-		Usage: "table name",
-		Required: true,
-	},
+var ItemKey = &cli.StringFlag{
+	Name:  Key,
+	Usage: "key",
+	Required: true,
 }
 
-var UpdateFlags = []cli.Flag{
-	&cli.StringFlag{
+//var TerraformFlags = []cli.Flag{
+//	&cli.StringFlag{
+//		Name:  TableName,
+//		Usage: "table name",
+//		Required: true,
+//	},
+//}
+
+var AttrUpdates = &cli.StringFlag{
 		Name:  AttributeUpdates,
 		Usage: "attribute updates",
 		Required: true,
-	},
-}
+	}
+
+var AttrCreates = &cli.StringFlag{
+		Name:  AttributeCreates,
+		Usage: "attribute creates",
+		Required: true,
+	}

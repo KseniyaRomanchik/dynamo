@@ -15,7 +15,7 @@ type DynamoRepo interface {
 	GetTable(string) (*dynamodb.ScanOutput, error)
 	ListTable() (*dynamodb.ListTablesOutput, error)
 	DelTable(string) (*dynamodb.DeleteTableOutput, error)
-	CrTable(string) (*dynamodb.CreateTableOutput, error)
+	CrTable(string, string) (*dynamodb.CreateTableOutput, error)
 	UpdTable(string) (*dynamodb.UpdateTableOutput, error)
 
 	//InfoItem(string) (*dynamodb.DescribeItemOutput, error)
@@ -62,10 +62,31 @@ func (c Dynamo) DelTable(tableName string) (*dynamodb.DeleteTableOutput, error) 
 	})
 }
 
-func (c Dynamo) CrTable(tableName string) (*dynamodb.CreateTableOutput, error) {
-	return c.CreateTable(&dynamodb.CreateTableInput{
+func (c Dynamo) CrTable(tableName string, attrCr string) (*dynamodb.CreateTableOutput, error) {
+	var attrDef []*dynamodb.AttributeDefinition
+	var key []*dynamodb.KeySchemaElement
+
+	if err := json.Unmarshal([]byte(attrCr), &attrDef); err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(attrCr), &key); err != nil {
+		return nil, err
+	}
+
+	input := dynamodb.CreateTableInput{
+		AttributeDefinitions: attrDef,
+		KeySchema: key,
+		ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
+			ReadCapacityUnits:  aws.Int64(DefaultProvisionedThroughput),
+			WriteCapacityUnits: aws.Int64(DefaultProvisionedThroughput),
+		},
 		TableName: aws.String(tableName),
-	})
+	}
+
+	log.Debug(input)
+
+	return c.CreateTable(&input)
 }
 
 func (c Dynamo) UpdTable(tableName string) (*dynamodb.UpdateTableOutput, error) {

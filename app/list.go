@@ -11,17 +11,15 @@ func ListTable(opts Options) error {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintJSON(list)
+	return printer.Printer.PrintJSON(list.TableNames)
 }
 
 
 func ListItem(opts Options) error {
-	tableName := opts.TableName
-
-	table, err := db.Client.ListItem(tableName)
+	item, err := db.Client.ListItem(opts.TableName)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintJSON(table)
+	return printer.Printer.PrintJSON(item)
 }

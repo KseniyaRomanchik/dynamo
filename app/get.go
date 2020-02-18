@@ -6,22 +6,20 @@ import (
 )
 
 func GetTable(opts Options) error {
-	tableName := opts.TableName
-
-	table, err := db.Client.GetTable(tableName)
+	table, err := db.Client.GetTable(opts.TableName)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintText(table)
+	return printer.Printer.PrintJSON(table.Items)
 }
 
 
 func GetItem(opts Options) error {
-	item, err := db.Client.GItem(opts.TableName, opts.HashKey)
+	item, err := db.Client.GItem(opts.TableName, opts.Key)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintText(item)
+	return printer.Printer.PrintJSON(item.Item)
 }
