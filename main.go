@@ -10,12 +10,20 @@ import (
 	"dynamo/db"
 )
 
+const (
+	LOG_LEVEL = "LOG_LEVEL"
+)
+
 func init() {
+	logLevel, err := log.ParseLevel(os.Getenv(LOG_LEVEL))
+	if err != nil {
+		logLevel = log.WarnLevel
+	}
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetOutput(os.Stdout)
-	log.SetLevel(log.DebugLevel)
+	log.SetLevel(logLevel)
 
-	err := flags.LoadFlags()
+	err = flags.LoadFlags()
 	if err != nil {
 		log.Fatal(err)
 	}

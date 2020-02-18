@@ -5,5 +5,6 @@ type Options struct {
 	Key string
 	TableAttributes string
 	ItemAttributes string
+	Prefix string
 }
 

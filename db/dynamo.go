@@ -12,7 +12,7 @@ import (
 
 type DynamoRepo interface {
 	InfoTable(string) (*dynamodb.DescribeTableOutput, error)
-	GetTable(string) (*dynamodb.ScanOutput, error)
+	GetTable(string, string) (*dynamodb.ScanOutput, error)
 	ListTable() (*dynamodb.ListTablesOutput, error)
 	DelTable(string) (*dynamodb.DeleteTableOutput, error)
 	CrTable(string, string) (*dynamodb.CreateTableOutput, error)
@@ -46,7 +46,8 @@ func (c Dynamo) InfoTable(tableName string) (*dynamodb.DescribeTableOutput, erro
 	})
 }
 
-func (c Dynamo) GetTable(tableName string) (*dynamodb.ScanOutput, error) {
+func (c Dynamo) GetTable(tableName string, prefix string) (*dynamodb.ScanOutput, error) {
+
 	return c.Scan(&dynamodb.ScanInput{
 		TableName: aws.String(tableName),
 	})
@@ -142,34 +143,48 @@ func (c Dynamo) DelItem(tableName string, keys string) (*dynamodb.DeleteItemOutp
 		return nil, err
 	}
 
-	log.Debugf("%+v", dynamodb.DeleteItemInput{
-		Key: filter,
-		TableName: aws.String(tableName),
-	})
+	cond := expression.Name(Locked).Equal(expression.Value(false))
 
-	return c.DeleteItem(&dynamodb.DeleteItemInput{
+	builder, err := expression.
+		NewBuilder().
+		WithCondition(cond).
+		Build()
+	if err != nil {
+		return nil, fmt.Errorf("cannot build update expression: %+v", err)
+	}
+
+	input := dynamodb.DeleteItemInput{
 		Key: filter,
+		ExpressionAttributeNames: builder.Names(),
+		ExpressionAttributeValues: builder.Values(),
+		ConditionExpression: builder.Condition(),
 		TableName: aws.String(tableName),
-	})
+	}
+
+	log.Debug(input)
+
+	return c.DeleteItem(&input)
 }
 
 func (c Dynamo) CrItem(tableName string, keys string) (*dynamodb.PutItemOutput, error) {
 	var filter map[string]*dynamodb.AttributeValue
 
-	err := json.Unmarshal([]byte(keys), &filter)
-	if err != nil {
+	if err := json.Unmarshal([]byte(keys), &filter); err != nil {
 		return nil, err
 	}
 
-	log.Debugf("%+v", dynamodb.PutItemInput{
-		Item: filter,
-		TableName: aws.String(tableName),
-	})
+	filter[Locked] = &dynamodb.AttributeValue{
+		BOOL: aws.Bool(false),
+	}
 
-	return c.PutItem(&dynamodb.PutItemInput{
+	input := dynamodb.PutItemInput{
 		Item: filter,
 		TableName: aws.String(tableName),
-	})
+	}
+
+	log.Debug(input)
+
+	return c.PutItem(&input)
 }
 
 func (c Dynamo) UpdItem(tableName, keys, attrUpd string) (*dynamodb.UpdateItemOutput, error) {
@@ -185,14 +200,10 @@ func (c Dynamo) UpdItem(tableName, keys, attrUpd string) (*dynamodb.UpdateItemOu
 
 	cond := expression.Name(Locked).Equal(expression.Value(false))
 
-	for k := range filter {
-		cond = cond.And(expression.Name(k).AttributeExists())
-	}
-
 	var update expression.UpdateBuilder
 	for k, v := range updValues {
 		update = update.Set(expression.Name(k), expression.Value(v))
-
+		cond = cond.And(expression.Name(k).AttributeExists())
 	}
 
 	builder, err := expression.

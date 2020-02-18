@@ -5,12 +5,12 @@ export DATE=$(shell date +%d-%m-%Y__%T)
 
 build:
 	@echo '*** BUILD ***'
-	@sudo docker run --env CGO_ENABLED=0 --name dynamo-build --rm -v $(PWD)\:$(WORKDIR) $(IMAGE_NAME) /bin/sh \
+	@docker run --env CGO_ENABLED=0 --name dynamo-build --rm -v $(PWD)\:$(WORKDIR) $(IMAGE_NAME) /bin/sh \
 	-c 'cd $(WORKDIR) && mkdir -p cmd && \
 	 go build -ldflags \
-	 "-X dynamo/flags.Image=$(IMAGE_NAME) \
-	 -X dynamo/flags.Commit=$(COMMIT) \
-	 -X dynamo/flags.Time=$(DATE)" \
+	 "-X dynamo/cli/flags.Image=$(IMAGE_NAME) \
+	 -X dynamo/cli/flags.Commit=$(COMMIT) \
+	 -X dynamo/cli/flags.Time=$(DATE)" \
 	 -o ./cmd'
 
 install: build

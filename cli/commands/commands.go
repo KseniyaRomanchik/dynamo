@@ -74,8 +74,8 @@ type ActionFlags struct {
 
 func LoadCommands() {
 	tableFls := ActionFlags{
-		Create: append(flags.Flags, flags.TName, flags.TableAttr),
-		Get: append(flags.Flags, flags.TName),
+		Create: append(flags.Flags, flags.TName),
+		Get: append(flags.Flags, flags.TName, flags.Pref),
 		Update: append(flags.Flags, flags.TName, flags.TableAttr),
 		Delete: append(flags.Flags, flags.TName),
 		List: flags.Flags,
@@ -83,7 +83,7 @@ func LoadCommands() {
 	}
 
 	itemFls := ActionFlags{
-		Create: append(flags.Flags, flags.TName, flags.ItemKey, flags.ItemAttr),
+		Create: append(flags.Flags, flags.TName, flags.ItemKey),
 		Get: append(flags.Flags, flags.TName, flags.ItemKey),
 		Update: append(flags.Flags, flags.TName, flags.ItemKey, flags.ItemAttr),
 		Delete: append(flags.Flags, flags.TName, flags.ItemKey),
@@ -131,6 +131,7 @@ func command(c, subc string) func (*cli.Context) error {
 			Key: ctx.String(flags.Key),
 			TableAttributes: ctx.String(flags.TableAttributes),
 			ItemAttributes: ctx.String(flags.ItemAttributes),
+			Prefix: ctx.String(flags.Prefix),
 		})
 	}
 }

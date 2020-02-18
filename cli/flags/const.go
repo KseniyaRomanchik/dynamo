@@ -5,12 +5,12 @@ const (
 	Key = "key"
 	ItemAttributes = "item-attributes"
 	TableAttributes = "table-attributes"
+	Prefix = "prefix"
 
 	Output = "output"
 
 	ItemsList = "items_list"
 	AwsAccount = "aws_account"
-	Prefix = "prefix"
 	RawItemKeyName = "raw_item_key_name"
 	RawItemKeyValue = "raw_item_key_value"
 	EnvType = "env_type"

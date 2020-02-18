@@ -51,3 +51,8 @@ var TableAttr = &cli.StringFlag{
 	Usage: "table attributes",
 	Required: true,
 }
+
+var Pref = &cli.StringFlag{
+	Name:  Prefix,
+	Usage: "prefix",
+}
