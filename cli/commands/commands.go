@@ -74,7 +74,7 @@ type ActionFlags struct {
 
 func LoadCommands() {
 	tableFls := ActionFlags{
-		Create: append(flags.Flags, flags.TName),
+		Create: append(flags.Flags, flags.TName, flags.TableAttr),
 		Get: append(flags.Flags, flags.TName, flags.Pref),
 		Update: append(flags.Flags, flags.TName, flags.TableAttr),
 		Delete: append(flags.Flags, flags.TName),

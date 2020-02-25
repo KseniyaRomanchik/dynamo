@@ -11,7 +11,7 @@ func ListTable(opts Options) error {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintJSON(list.TableNames)
+	return printer.Printer.PrintText(list)
 }
 
 

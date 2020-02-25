@@ -16,7 +16,7 @@ type DynamoRepo interface {
 	ListTable() (*dynamodb.ListTablesOutput, error)
 	DelTable(string) (*dynamodb.DeleteTableOutput, error)
 	CrTable(string, string) (*dynamodb.CreateTableOutput, error)
-	UpdTable(string) (*dynamodb.UpdateTableOutput, error)
+	UpdTable(string, string) (*dynamodb.UpdateTableOutput, error)
 
 	//InfoItem(string) (*dynamodb.DescribeItemOutput, error)
 	GItem(string, string) (*dynamodb.GetItemOutput, error)
@@ -90,8 +90,20 @@ func (c Dynamo) CrTable(tableName string, attrCr string) (*dynamodb.CreateTableO
 	return c.CreateTable(&input)
 }
 
-func (c Dynamo) UpdTable(tableName string) (*dynamodb.UpdateTableOutput, error) {
+func (c Dynamo) UpdTable(tableName string, attrUpd string) (*dynamodb.UpdateTableOutput, error) {
+	var attrDef []*dynamodb.AttributeDefinition
+	var key []*dynamodb.KeySchemaElement
+
+	if err := json.Unmarshal([]byte(attrUpd), &attrDef); err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal([]byte(attrUpd), &key); err != nil {
+		return nil, err
+	}
+
 	input := dynamodb.UpdateTableInput{
+		AttributeDefinitions: attrDef,
 		TableName: aws.String(tableName),
 	}
 
@@ -203,7 +215,6 @@ func (c Dynamo) UpdItem(tableName, keys, attrUpd string) (*dynamodb.UpdateItemOu
 	var update expression.UpdateBuilder
 	for k, v := range updValues {
 		update = update.Set(expression.Name(k), expression.Value(v))
-		cond = cond.And(expression.Name(k).AttributeExists())
 	}
 
 	builder, err := expression.

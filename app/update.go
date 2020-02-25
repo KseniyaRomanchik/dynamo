@@ -6,12 +6,12 @@ import (
 )
 
 func UpdateTable(opts Options) error {
-	table, err := db.Client.UpdTable(opts.TableName)
+	table, err := db.Client.UpdTable(opts.TableName, opts.TableAttributes)
 	if err != nil {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintJSON(table)
+	return printer.Printer.PrintText(table)
 }
 
 

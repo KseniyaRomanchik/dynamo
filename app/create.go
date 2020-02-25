@@ -11,7 +11,7 @@ func CreateTable(opts Options) error {
 		return printer.Printer.PrintAWSErr(err)
 	}
 
-	return printer.Printer.PrintJSON(table)
+	return printer.Printer.PrintText(table)
 }
 
 func CreateItem(opts Options) error {
